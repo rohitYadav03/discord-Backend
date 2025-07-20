@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import signUpService from "../services/userService.js"
+import { signInService, signUpService} from "../services/userService.js"
 import { customErrorResponse, internalErrorResponse, successResponse } from "../utils/common/responseObject.js";
 
- const signUp = async(req,res) => {
+export const signUp = async(req,res) => {
     try {
  const user = await signUpService(req.body);
 return res.status(StatusCodes.CREATED).json(successResponse(user,"user created successfully"))  
@@ -17,8 +17,18 @@ return res.status(StatusCodes.CREATED).json(successResponse(user,"user created s
 
       return res.status(StatusCodes.BAD_REQUEST).json(internalErrorResponse(error))
     }
-
-
 }
 
-export default signUp;
+export const signIn = async(req,res) => {
+   try {
+    const response = await signInService(req.body);
+   return res.status(StatusCodes.OK).json(successResponse(response, "User signed in scussefully"))
+   } catch (error) {
+    console.log(`ERROR user controller : ${error}`);
+     if(error.statusCode){
+        return res.status(error.statusCode).json(customErrorResponse(error))
+      }
+
+      return res.status(StatusCodes.BAD_REQUEST).json(internalErrorResponse(error))
+   }
+}
