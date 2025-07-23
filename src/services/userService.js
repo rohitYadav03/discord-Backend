@@ -12,11 +12,22 @@ SIGNUP API FLOW:
 */
 export  const signUpService = async(data) => {
 try {
+  const userExist = await userRepositories.getUserByEmail(data.email);
+  if(userExist){
+        throw new validationError({
+        error : ["A user with same email or username alredy exist"]
+    },
+   "A user with smae email or username alredy exist"
+)
+  }
     const newUser = await userRepositories.create(data);
     console.log(newUser);
     
     return { success: true, user: newUser };
 } catch (error) {
+
+  console.log(`user service ERROR : ${error}`);
+  
   if(error.name === "ValidationError"){
     throw new validationError(
         {
@@ -25,13 +36,17 @@ try {
     error.message
 );
   }
+
  if(error.code === 11000 || error.cause?.code === 11000 ){
     throw new validationError({
         error : ["A user with same email or username alredy exist"]
     },
    "A user with smae email or username alredy exist"
-)}  
+)}
+throw error;
+
 }
+
 }
 
 export const signInService = async(data) => {

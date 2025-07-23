@@ -7,7 +7,7 @@ import userRepositories from "../repositories/userRepositories.js";
 const isAuthenticated = async (req, res, next) => {
   try {
 
-    const token = req.headers['auth-token'];
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(StatusCodes.FORBIDDEN).json(
@@ -55,3 +55,4 @@ const isAuthenticated = async (req, res, next) => {
 };
 
 export default isAuthenticated;
+
