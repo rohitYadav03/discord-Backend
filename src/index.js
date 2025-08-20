@@ -9,7 +9,6 @@ import { Server } from 'socket.io';
 import http from "http"
 
 import "./procesors/mailProcessor.js"
-import { log } from 'console';
 import messageSocketController from './controllers/messageSocketController.js';
 const app = express();
 
